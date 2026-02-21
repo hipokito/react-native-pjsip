@@ -10,14 +10,20 @@ APP_PLATFORM="android-24"
 ABI="arm64-v8a"
 
 export ANDROID_NDK_HOME=${NDK_PATH}
-export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
+export ANDROID_NDK_ROOT=${NDK_PATH}
+export PATH="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
 
 # Build OpenSSL
 wget ${OPENSSL_URL} -O openssl.tar.gz
 tar -xzf openssl.tar.gz
 rm openssl.tar.gz
 cd openssl-${OPENSSL_VERSION}
-./Configure android-arm64 -fPIC no-asm shared --openssldir=openssl --prefix=$(pwd)/build
+export CC=clang
+export CXX=clang++
+export AR=llvm-ar
+export RANLIB=llvm-ranlib
+export LD=ld
+./Configure android-arm64 -fPIC no-asm no-shared --openssldir=openssl --prefix=$(pwd)/build
 make -j$(nproc)
 make install
 cd ..

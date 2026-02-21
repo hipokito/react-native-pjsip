@@ -17,7 +17,7 @@ wget ${OPENSSL_URL} -O openssl.tar.gz
 tar -xzf openssl.tar.gz
 rm openssl.tar.gz
 cd openssl-${OPENSSL_VERSION}
-./Configure android-aarch64 -fPIC no-asm shared --openssldir=openssl --prefix=$(pwd)/build
+./Configure android-arm64 -fPIC no-asm shared --openssldir=openssl --prefix=$(pwd)/build
 make -j$(nproc)
 make install
 cd ..
@@ -37,7 +37,6 @@ cp *.a ../../libs/
 cd ../../pjlib/lib
 cp *.a ../../libs/
 cd ../../pjlib-util/lib
-cp *.a ../../libs/
 cp *.a ../../libs/
 cd ../../pjmedia/lib
 cp *.a ../../libs/

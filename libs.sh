@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+OPENSSL_VERSION="3.3.0"
+OPENSSL_URL="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
 PJSIP_VERSION="2.16"
 PJSIP_URL="https://github.com/pjsip/pjproject/archive/refs/tags/${PJSIP_VERSION}.tar.gz"
 NDK_PATH="$HOME/Android/Sdk/ndk/27.1.12297006"
@@ -11,13 +13,11 @@ export ANDROID_NDK_HOME=${NDK_PATH}
 export PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH"
 
 # Build OpenSSL
-OPENSSL_VERSION="3.3.0"
-OPENSSL_URL="https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
 wget ${OPENSSL_URL} -O openssl.tar.gz
 tar -xzf openssl.tar.gz
 rm openssl.tar.gz
 cd openssl-${OPENSSL_VERSION}
-./Configure android-${ABI} -fPIC no-asm shared --openssldir=openssl --prefix=$(pwd)/build
+./Configure android-aarch64 -fPIC no-asm shared --openssldir=openssl --prefix=$(pwd)/build
 make -j$(nproc)
 make install
 cd ..
@@ -37,6 +37,7 @@ cp *.a ../../libs/
 cd ../../pjlib/lib
 cp *.a ../../libs/
 cd ../../pjlib-util/lib
+cp *.a ../../libs/
 cp *.a ../../libs/
 cd ../../pjmedia/lib
 cp *.a ../../libs/
